@@ -1,1 +1,3 @@
-comunicacion cerrada de punto a punto
+comunicacion cerrada de punto a punto 
+
+condicionado a cambio de la web
