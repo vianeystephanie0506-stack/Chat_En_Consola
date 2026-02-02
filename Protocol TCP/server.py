@@ -1,6 +1,6 @@
 import socket
 
-HOST = "192.168.1.72"  # IP de tu máquina en la red local
+HOST = "192.168.1.68"  # IP de tu máquina en la red local
 PORT = 9090             # mismo puerto en cliente y servidor
 
 # Crear el socket TCP
