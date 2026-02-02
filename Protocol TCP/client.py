@@ -1,14 +1,38 @@
 import socket
 
-HOST = "192.168.0.67"  # IP del servidor
-PORT = 8080        # mismo puerto que el servidor
+HOST = "192.168.1.72"  # IP de tu máquina en la red local
+PORT = 9090             # mismo puerto en cliente y servidor
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((HOST, PORT))
+# Crear el socket TCP
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client_socket.sendall(b"Hola servidor")
+# Permite reutilizar el puerto rápidamente si reinicias el servidor
+server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-data = client_socket.recv(1024)
-print("Servidor responde:", data.decode())
+# Asociar IP y puerto
+server_socket.bind((HOST, PORT))
 
-client_socket.close()
+# Escuchar conexiones
+server_socket.listen(5)  # permite hasta 5 clientes en cola
+print("Servidor escuchando en", HOST, "puerto", PORT)
+
+try:
+    while True:
+        # Espera a que un cliente se conecte
+        conn, addr = server_socket.accept()
+        print(f"Conectado desde {addr}")
+
+        # Manejo del cliente
+        with conn:
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
+                print("Cliente dice:", data.decode())
+                conn.sendall(b"Mensaje recibido")
+                
+except KeyboardInterrupt:
+    print("\nServidor detenido manualmente.")
+
+finally:
+    server_socket.close()
